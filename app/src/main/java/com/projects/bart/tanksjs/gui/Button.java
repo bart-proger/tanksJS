@@ -9,29 +9,14 @@ import com.projects.bart.tanksjs.Texture;
  * Created by BART on 17.10.2017.
  */
 
-public class Button extends Sprite {
-
-	private Rect rect;
+public class Button extends Widget {
 
 	public Button(Texture texture, Rect textureRegion) {
 		super(texture, textureRegion);
-		this.rect = new Rect(0, 0, textureRegion.width, textureRegion.height);
 	}
 
 	public Button(Point position, Texture texture, Rect textureRegion) {
-		super(texture, textureRegion);
-		this.rect = new Rect(position.x, position.y, textureRegion.width, textureRegion.height);
+		super(position, texture, textureRegion);
 	}
 
-	public void onClick() {
-	}
-
-	public Rect getRect() {
-		return rect;
-	}
-
-	public void setPosition(Point position) {
-		rect.x = position.x;
-		rect.y = position.y;
-	}
 }

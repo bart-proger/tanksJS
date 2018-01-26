@@ -14,23 +14,24 @@ import java.util.ArrayList;
 
 public class GUI {
 
-	private ArrayList<Button> buttons = new ArrayList<>();
+	private ArrayList<Widget> widgets = new ArrayList<>();
 
-	public void addButton(Button button) {
-		buttons.add(button);
+	public void addWidget(Widget widget) {
+		widgets.add(widget);
 	}
 
+	//TODO: обрабатывать все event's
 	public void touchEvent(MotionEvent event, PointF touch) {
-		for (Button b : buttons) {
-			if (b.getRect().contains(touch.toPoint())) {
-				b.onClick();
+		for (Widget w : widgets) {
+			if (w.getRect().contains(touch.toPoint())) {
+				w.onTouch();
 			}
 		}
 	}
 
 	public void draw(Graphics g) {
-		for (Button b : buttons) {
-			g.drawSprite(b, b.getRect().x, b.getRect().y);
+		for (Widget w : widgets) {
+			g.drawSprite(w, w.getRect().x, w.getRect().y);
 		}
 	}
 

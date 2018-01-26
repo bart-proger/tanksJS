@@ -15,6 +15,7 @@ import com.projects.bart.tanksjs.game.Game;
 import com.projects.bart.tanksjs.game.Painter;
 import com.projects.bart.tanksjs.gui.Button;
 import com.projects.bart.tanksjs.gui.GUI;
+import com.projects.bart.tanksjs.gui.Widget;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -46,6 +47,7 @@ class OpenGLRenderer implements GLSurfaceView.Renderer {
 	Painter painter;
 	Game game;
 	GUI gui;
+	Button btnStart;
 
 //TODO: buttons click
 // 376 24 16 16
@@ -67,12 +69,14 @@ class OpenGLRenderer implements GLSurfaceView.Renderer {
 		game = new Game();
 		gui = new GUI();
 
-		gui.addButton(new Button(texture, new Rect(368, 180, 32, 20)) {
+		btnStart = new Button(texture, new Rect(368, 180, 32, 20));
+		btnStart.setTouchListener(new Widget.OnTouchListener() {
 			@Override
-			public void onClick() {
+			public void onTouch() {
 				game.start();
 			}
 		});
+		gui.addWidget(btnStart);
 	}
 
 	@Override
@@ -80,26 +84,28 @@ class OpenGLRenderer implements GLSurfaceView.Renderer {
 		camera.resize(width, height);
 		g.setCamera(camera);
 
-		//buttons.get(0).setPosition(new Point(0, (int)((height-buttons.get(0).getRect().height*4) / camera.getScale())));
+		btnStart.setPosition(new Point(0, (int)((height-btnStart.getRect().height*4) / camera.getScale())));
 	}
+
+	PointF touch = null;
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		lastTime = time;
 		time = SystemClock.currentThreadTimeMillis()/*uptimeMillis()*/;
-		game.update((float)(time - lastTime), (float)time);
+		game.update(/*(float)(time - lastTime)*/10, (float)time);
 		//gui.update();
 
 		glClear(GL_COLOR_BUFFER_BIT/* | GL_DEPTH_BUFFER_BIT*/);
 		game.draw(painter);
 		gui.draw(g);
 
-		/*if (touch != null)
-			g.drawSprite(sprite, (int)touch.toPx().x-8, (int)touch.toPx().y-8);*/
+		if (touch != null)
+			g.drawSprite(sprite, (int)touch.toPx().x-8, (int)touch.toPx().y-8);
 	}
 
 	public boolean onTouchEvent(MotionEvent event) {
-		PointF touch = new PointF(event.getX() / camera.getScale(), event.getY()  / camera.getScale());
+		/*PointF*/ touch = new PointF(event.getX() / camera.getScale(), event.getY()  / camera.getScale());
 
 		gui.touchEvent(event, touch);
 
