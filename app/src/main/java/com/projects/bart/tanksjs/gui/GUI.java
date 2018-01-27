@@ -12,6 +12,8 @@ import java.util.ArrayList;
  * Created by BART on 19.10.2017.
  */
 
+//TODO: обрабатывать все event's
+
 public class GUI {
 
 	private ArrayList<Widget> widgets = new ArrayList<>();
@@ -20,18 +22,17 @@ public class GUI {
 		widgets.add(widget);
 	}
 
-	//TODO: обрабатывать все event's
 	public void touchEvent(MotionEvent event, PointF touch) {
 		for (Widget w : widgets) {
-			if (w.getRect().contains(touch.toPoint())) {
-				w.onTouch();
+			if (w.getRegion().contains(touch.toPoint())) {
+				w.touchEvent(event, touch);
 			}
 		}
 	}
 
 	public void draw(Graphics g) {
 		for (Widget w : widgets) {
-			g.drawSprite(w, w.getRect().x, w.getRect().y);
+			w.draw(g);
 		}
 	}
 
