@@ -70,9 +70,9 @@ class OpenGLRenderer implements GLSurfaceView.Renderer {
 		gui = new GUI();
 
 		btnStart = new Button(texture, new Rect(368, 180, 32, 20));
-		btnStart.setTouchListener(new Widget.OnTouchListener() {
+		btnStart.setTouchEventListener(new Widget.OnTouchEventListener() {
 			@Override
-			public void onTouch() {
+			public void onTouchEvent(MotionEvent event, PointF touch) {
 				game.start();
 			}
 		});
@@ -84,7 +84,7 @@ class OpenGLRenderer implements GLSurfaceView.Renderer {
 		camera.resize(width, height);
 		g.setCamera(camera);
 
-		btnStart.setPosition(new Point(0, (int)((height-btnStart.getRect().height*4) / camera.getScale())));
+		btnStart.setPosition(new Point(0, (int)((height-btnStart.getRegion().height*4) / camera.getScale())));
 	}
 
 	PointF touch = null;
@@ -93,7 +93,7 @@ class OpenGLRenderer implements GLSurfaceView.Renderer {
 	public void onDrawFrame(GL10 gl) {
 		lastTime = time;
 		time = SystemClock.currentThreadTimeMillis()/*uptimeMillis()*/;
-		game.update(/*(float)(time - lastTime)*/10, (float)time);
+		game.update((float)(time - lastTime), (float)time);
 		//gui.update();
 
 		glClear(GL_COLOR_BUFFER_BIT/* | GL_DEPTH_BUFFER_BIT*/);
