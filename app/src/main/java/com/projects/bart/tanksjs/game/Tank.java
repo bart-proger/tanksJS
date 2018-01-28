@@ -63,6 +63,8 @@ class Tank extends GameObject {
 			this.dir = dir;
 			cell.x += Math.round((float)offset.x / 8.0f);
 			cell.y += Math.round((float)offset.y / 8.0f);
+
+			offset = new Point(0, 0);
 		}
 	}
 

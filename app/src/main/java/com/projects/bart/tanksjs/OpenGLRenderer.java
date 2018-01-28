@@ -36,8 +36,11 @@ import static android.opengl.GLES20.glUniformMatrix4fv;
 
 class OpenGLRenderer implements GLSurfaceView.Renderer {
 
+	private static long MAX_FRAME_TIME = 1000 / 20; // == 25 FPS
+	private static final long MAX_SKIPPED_FRAMES = 5;
+
 	private Context context;
-	private long lastTime, time;
+	private long time;
 
 	private Graphics g;
 	private Texture texture;
@@ -77,6 +80,8 @@ class OpenGLRenderer implements GLSurfaceView.Renderer {
 			}
 		});
 		gui.addWidget(btnStart);
+
+		time = System.currentTimeMillis();
 	}
 
 	@Override
@@ -91,9 +96,25 @@ class OpenGLRenderer implements GLSurfaceView.Renderer {
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
-		lastTime = time;
-		time = SystemClock.currentThreadTimeMillis()/*uptimeMillis()*/;
-		game.update((float)(time - lastTime), (float)time);
+		long frameTime = System.currentTimeMillis() - time;
+		long sleepTime = MAX_FRAME_TIME - frameTime;
+		long skippedFrames = 0;
+
+		if (sleepTime > 0) {
+			try {
+				Thread.sleep(sleepTime);
+			} catch (InterruptedException e) {}
+			Log.d("DBG", "sleep = " + String.valueOf(sleepTime) + " ms");
+		}
+
+		while (sleepTime < 0 && skippedFrames < MAX_SKIPPED_FRAMES) {
+			game.update(MAX_FRAME_TIME/*dt*/, (float)time);
+			skippedFrames++;
+			sleepTime += MAX_FRAME_TIME;
+		}
+
+		time = System.currentTimeMillis();
+		game.update(MAX_FRAME_TIME/*dt*/, (float)time);
 		//gui.update();
 
 		glClear(GL_COLOR_BUFFER_BIT/* | GL_DEPTH_BUFFER_BIT*/);
