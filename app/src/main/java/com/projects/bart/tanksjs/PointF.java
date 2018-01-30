@@ -18,17 +18,22 @@ public class PointF {
 		this.y = source.y;
 	}
 
+	public PointF(PointF source) {
+		this.x = source.x;
+		this.y = source.y;
+	}
+
 	public PointF(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
 
-	public void add(Point a) {
+	public void add(PointF a) {
 		this.x += a.x;
 		this.y += a.y;
 	}
 
-	public void sub(Point a) {
+	public void sub(PointF a) {
 		this.x -= a.x;
 		this.y -= a.y;
 	}
